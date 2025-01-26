@@ -1,15 +1,18 @@
 'use client';
 import React, { useContext, useState } from 'react';
 import ChatContext from '../Context/ChatContext';
+import { Submit } from '../SVG';
+import ThemeContext from '../Context/ThemeContext';
 export const Footer: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const { requestQuery } = useContext(ChatContext);
+  const { theme } = useContext(ThemeContext);
   return (
     <div className="flex justify-center items-center">
-      <div className="flex flex-col w-full sm:w-3/6 h-26 border rounded-xl">
+      <div className="flex flex-col w-full sm:w-3/6 h-26 border shadow-md shadow-neutral-300 rounded-xl">
         <span className="flex flex-col justify-center p-2 h-full">
           <textarea
-            className="border rounded-lg outline-none flex pt-2 pl-2 resize-none max-h-32"
+            className="border rounded-lg shadow-sm shadow-neutral-100 outline-none flex pt-2 pl-2 resize-none max-h-32 bg-transparent"
             placeholder="Type.."
             value={query}
             onChange={(e) => {
@@ -26,8 +29,16 @@ export const Footer: React.FC = () => {
               }
             }}
           />
-          <span className="py-1  flex justify-end">
-            <button className="bg-yellow-500">submit</button>
+          <span className="py-1 flex justify-end">
+            <button
+              className="text-neutral-300"
+              onClick={(e) => {
+                requestQuery(query);
+                setQuery('');
+              }}
+            >
+              <Submit theme={theme} />
+            </button>
           </span>
         </span>
       </div>
