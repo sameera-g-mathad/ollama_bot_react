@@ -17,16 +17,27 @@ const ThemeContext = createContext<themeInterface>({
 export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
   const [theme, setTheme] = useState<string>('light');
   const changeTheme = (theme: string) => {
-    if (['light', 'dark', 'system'].includes(theme)) {
-      if (theme === 'system') {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches)
-          setTheme('dark');
-        else setTheme('light');
-      } else setTheme(theme);
-    }
+    if (['light', 'dark', 'system'].includes(theme)) setTheme(theme);
+    //   {
+    //   if (theme === 'system') {
+    //     if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+    //       setTheme('dark');
+    //     else setTheme('light');
+    //   } else setTheme(theme);
+    // }
   };
   return (
-    <ThemeContext.Provider value={{ theme, changeTheme }}>
+    <ThemeContext.Provider
+      value={{
+        theme:
+          theme === 'system'
+            ? window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+            : theme,
+        changeTheme,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

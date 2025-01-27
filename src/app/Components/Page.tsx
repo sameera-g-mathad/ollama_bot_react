@@ -4,6 +4,7 @@ import ThemeContext from '../Context/ThemeContext';
 
 export const Page: React.FC = () => {
   const { theme } = useContext(ThemeContext);
+
   return (
     <div
       className={`page ${theme === 'light' ? 'bg-white' : 'bg-gray-700'} ${
