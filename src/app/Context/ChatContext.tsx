@@ -1,7 +1,8 @@
-import React, { createContext, useState, useReducer } from 'react';
+import React, { createContext, useReducer } from 'react';
+import { Chat } from '../Components';
 
 interface chatInterface {
-  chatHistory: string[];
+  chatHistory: React.ReactNode[];
   requestQuery: (query: string) => void;
 }
 
@@ -21,13 +22,13 @@ const reducer = (
       return {
         ...state,
         message: state.message + payload.value,
-        chatHistory: [...state.chatHistory, state.message],
       };
+    case 'set_chat_from_user':
+      return { ...state, chatHistory: [...state.chatHistory, payload.value] };
     case 'set_chat_from_llm':
       return {
         ...state,
-        chatHistory: [...state.chatHistory, state.message],
-        message: '',
+        chatHistory: [...state.chatHistory, payload.value],
       };
     default:
       return state;
@@ -46,6 +47,14 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
   });
   const requestQuery = async (query: string) => {
     try {
+      dispatch({
+        action: 'set_chat_from_user',
+        value: React.cloneElement(
+          <Chat>
+            <div>{query}</div>
+          </Chat>
+        ),
+      });
       const response = await fetch(`${BASE_URL}/api/generate`, {
         method: 'POST',
         headers: {
@@ -53,6 +62,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
         },
         body: JSON.stringify({ model: 'llama3.2', prompt: query }),
       });
+
       if (response.body) {
         const reader = response.body?.getReader();
         let finish = false;
@@ -64,7 +74,14 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
               decoder.decode(value, { stream: true })
             );
             if (!done) {
-              dispatch({ action: 'set_message', value: response });
+              dispatch({
+                action: 'set_chat_from_llm',
+                value: React.cloneElement(
+                  <Chat>
+                    <div>{response}</div>
+                  </Chat>
+                ),
+              });
             }
           }
           // else {
