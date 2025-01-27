@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import ChatContext from '../Context/ChatContext';
 
 export const Body: React.FC = () => {
+  const { chatHistory } = useContext(ChatContext);
   return (
-    <div className="flex justify-center">
-      <div className=" sm:w-1/2 w-full overflow-y-scroll">Body</div>
+    <div className="flex justify-center overflow-y-scroll">
+      <div className=" sm:w-1/2 w-full">
+        {chatHistory.map((el, i) => (
+          <div key={i}>{el}</div>
+        ))}
+      </div>
     </div>
   );
 };

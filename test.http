@@ -1,7 +1,8 @@
 @BASE_URL = http://localhost:11434/
 
 
-GET {{BASE_URL}}/api/ps
+# GET {{BASE_URL}}/api/ps
+
 
 POST {{BASE_URL}}api/generate HTTP/1.1
 User-Agent: rest-client
@@ -9,5 +10,5 @@ Content-Type: application/json
 
 {
   "model": "llama3.2", 
-  "prompt": "Why is the sky blue?"
+  "prompt": "Why is the sky blue in two lines?"
 }
