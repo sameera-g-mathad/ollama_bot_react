@@ -15,7 +15,7 @@ const ThemeContext = createContext<themeInterface>({
 });
 
 export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
-  const [theme, setTheme] = useState<string>('system');
+  const [theme, setTheme] = useState<string>('light');
   const changeTheme = (theme: string) => {
     if (['light', 'dark', 'system'].includes(theme)) {
       if (theme === 'system') {

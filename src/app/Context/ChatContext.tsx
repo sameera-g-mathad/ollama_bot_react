@@ -63,7 +63,11 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
         value: [
           React.cloneElement(
             <Chat key={state.chatHistory.length}>
-              <div>{query}</div>
+              <div className="flex justify-end">
+                <span className="border p-1 rounded-lg shadow-sm  shadow-neutral-100 rounded-tr-none">
+                  {query}
+                </span>
+              </div>
             </Chat>
           ),
           <Chat key={state.chatHistory.length + 1}>

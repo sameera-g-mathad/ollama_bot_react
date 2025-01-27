@@ -5,5 +5,5 @@ interface childProps {
 }
 
 export const Chat: React.FC<childProps> = ({ children }) => {
-  return <div>{children}</div>;
+  return <div className="p-1 my-2">{children}</div>;
 };
