@@ -18,17 +18,28 @@ const reducer = (
   payload: any
 ) => {
   switch (payload.action) {
-    case 'set_message':
+    // case 'set_message':
+    //   return {
+    //     ...state,
+    //     message: state.message + payload.value,
+    //   };
+    case 'set_chat':
       return {
         ...state,
-        message: state.message + payload.value,
+        chatHistory: [...state.chatHistory, payload.value[0], payload.value[1]],
       };
-    case 'set_chat_from_user':
-      return { ...state, chatHistory: [...state.chatHistory, payload.value] };
     case 'set_chat_from_llm':
       return {
         ...state,
-        chatHistory: [...state.chatHistory, payload.value],
+        chatHistory: state.chatHistory.map((chat, index) => {
+          if (index === payload.value[0])
+            return React.cloneElement(
+              <Chat key={state.chatHistory.length - 1}>
+                <div>{payload.value[1]}</div>
+              </Chat>
+            );
+          return chat;
+        }),
       };
     default:
       return state;
@@ -48,12 +59,17 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
   const requestQuery = async (query: string) => {
     try {
       dispatch({
-        action: 'set_chat_from_user',
-        value: React.cloneElement(
-          <Chat>
-            <div>{query}</div>
-          </Chat>
-        ),
+        action: 'set_chat',
+        value: [
+          React.cloneElement(
+            <Chat key={state.chatHistory.length}>
+              <div>{query}</div>
+            </Chat>
+          ),
+          <Chat key={state.chatHistory.length + 1}>
+            <div>{}</div>
+          </Chat>,
+        ],
       });
       const response = await fetch(`${BASE_URL}/api/generate`, {
         method: 'POST',
@@ -66,6 +82,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
       if (response.body) {
         const reader = response.body?.getReader();
         let finish = false;
+        let message = '';
         while (!finish) {
           const { done: doneReading, value } = await reader.read();
           finish = doneReading;
@@ -73,14 +90,12 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
             const { response, done } = JSON.parse(
               decoder.decode(value, { stream: true })
             );
+
             if (!done) {
+              message += response;
               dispatch({
                 action: 'set_chat_from_llm',
-                value: React.cloneElement(
-                  <Chat>
-                    <div>{response}</div>
-                  </Chat>
-                ),
+                value: [state.chatHistory.length + 1, message],
               });
             }
           }
