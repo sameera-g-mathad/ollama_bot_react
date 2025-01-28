@@ -58,13 +58,14 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
   });
   const requestQuery = async (query: string) => {
     try {
+      if (query === '') return;
       dispatch({
         action: 'set_chat',
         value: [
           React.cloneElement(
             <Chat key={state.chatHistory.length}>
               <div className="flex justify-end">
-                <span className="border p-1 rounded-lg shadow-sm  shadow-neutral-100 rounded-tr-none">
+                <span className="border p-1 rounded-xl shadow-sm  shadow-neutral-100 rounded-tr-none">
                   {query}
                 </span>
               </div>
@@ -103,11 +104,6 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
               });
             }
           }
-          // else {
-          //   dispatch({ action: 'set_chat_from_llm' });
-          //   // setChatHistory((history) => [...history, message]);
-          //   // setMessage('');
-          // }
         }
       }
     } catch (e) {
