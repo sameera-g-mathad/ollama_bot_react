@@ -3,12 +3,13 @@ import React, { useContext, useState } from 'react';
 import ChatContext from '../Context/ChatContext';
 import { Submit } from '../SVG';
 import ThemeContext from '../Context/ThemeContext';
+
 export const Footer: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const { requestQuery } = useContext(ChatContext);
   const { theme } = useContext(ThemeContext);
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center text-base">
       <div className="flex flex-col w-full sm:w-3/6 h-26 border shadow-md shadow-neutral-300 rounded-xl">
         <span className="flex flex-col justify-center p-2 h-full">
           <textarea

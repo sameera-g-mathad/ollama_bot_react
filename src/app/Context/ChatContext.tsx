@@ -18,11 +18,6 @@ const reducer = (
   payload: any
 ) => {
   switch (payload.action) {
-    // case 'set_message':
-    //   return {
-    //     ...state,
-    //     message: state.message + payload.value,
-    //   };
     case 'set_chat':
       return {
         ...state,
@@ -95,7 +90,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
             const { response, done } = JSON.parse(
               decoder.decode(value, { stream: true })
             );
-
+            console.log(JSON.parse(decoder.decode(value, { stream: true })));
             if (!done) {
               message += response;
               dispatch({

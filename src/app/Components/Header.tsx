@@ -6,8 +6,10 @@ import {
   LightThemeSVG,
   SettingSVG,
 } from '../SVG';
+import { Button, ButtonGroup } from './index';
+
 export const Header: React.FC = () => {
-  const { theme, changeTheme } = useContext(ThemeContext);
+  const { theme, changeTheme, changeTextSize } = useContext(ThemeContext);
   const [setting, setSetting] = useState<boolean>(false);
   return (
     <div className="flex justify-between items-center mx-4">
@@ -16,21 +18,33 @@ export const Header: React.FC = () => {
         <SettingSVG theme={theme} />
       </button>
       <div
-        className={`w-44 h-40 absolute border shadow-md  shadow-neutral-100 rounded-lg right-2 top-10 ${
+        className={`w-44  absolute border shadow-sm  shadow-neutral-100 rounded-lg right-2 top-10 ${
           theme === 'light' ? 'bg-white' : 'bg-gray-700'
         } ${setting ? 'visible' : 'hidden'}`}
       >
-        <div className="flex">
-          <button onClick={() => changeTheme('light')} className="p-1">
+        <ButtonGroup>
+          <Button callback={() => changeTheme('light')}>
             <LightThemeSVG theme={theme} />
-          </button>
-          <button onClick={() => changeTheme('dark')} className="p-1">
+          </Button>
+          <Button callback={() => changeTheme('dark')}>
             <DarkThemeSVG theme={theme} />
-          </button>
-          <button onClick={() => changeTheme('system')} className="p-1">
+          </Button>
+          <Button callback={() => changeTheme('system')}>
             <DefaultThemeSVG theme={theme} />
-          </button>
-        </div>
+          </Button>
+        </ButtonGroup>
+
+        <ButtonGroup>
+          <Button callback={() => changeTextSize('text-xs')}>
+            <span className="text-xs">aA</span>
+          </Button>
+          <Button callback={() => changeTextSize('text-base')}>
+            <span className="text-base">aA</span>
+          </Button>
+          <Button callback={() => changeTextSize('text-lg')}>
+            <span className="text-lg">aA</span>
+          </Button>
+        </ButtonGroup>
       </div>
     </div>
   );
