@@ -1,3 +1,4 @@
+'use client';
 import React, { createContext, useState, useReducer } from 'react';
 
 interface childProps {
@@ -63,7 +64,8 @@ export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
         ...state,
         theme:
           state.theme === 'system'
-            ? window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? typeof window !== undefined &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches
               ? 'dark'
               : 'light'
             : state.theme,

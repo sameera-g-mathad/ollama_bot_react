@@ -35,7 +35,7 @@ export const Header: React.FC = () => {
         </ButtonGroup>
 
         <ButtonGroup>
-          <Button callback={() => changeTextSize('text-xs')}>
+          <Button callback={() => changeTextSize('text-sm')}>
             <span className="text-xs">aA</span>
           </Button>
           <Button callback={() => changeTextSize('text-base')}>

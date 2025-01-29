@@ -1,8 +1,13 @@
 import React, { createContext, useReducer } from 'react';
 import { Chat } from '../Components';
 
-interface chatInterface {
+interface chatRequirementsInterface {
   chatHistory: React.ReactNode[];
+  models: string[];
+  isRunning: boolean;
+}
+
+interface chatInterface extends chatRequirementsInterface {
   requestQuery: (query: string) => void;
 }
 
@@ -13,10 +18,7 @@ interface childProps {
 const BASE_URL = 'http://localhost:11434';
 const decoder = new TextDecoder();
 
-const reducer = (
-  state: { message: string; chatHistory: string[] },
-  payload: any
-) => {
+const reducer = (state: chatRequirementsInterface, payload: any) => {
   switch (payload.action) {
     case 'set_chat':
       return {
@@ -43,14 +45,18 @@ const reducer = (
 
 const ChatContext = createContext<chatInterface>({
   chatHistory: [],
+  models: [],
+  isRunning: false,
   requestQuery: (query: string) => false,
 });
 
 export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
-    message: '',
+    models: [],
+    isRunning: false,
     chatHistory: [],
   });
+
   const requestQuery = async (query: string) => {
     try {
       if (query === '') return;
@@ -105,10 +111,17 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
       console.log(e);
     }
   };
+
+  const listModels = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/ps`);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
-    <ChatContext.Provider
-      value={{ chatHistory: state.chatHistory, requestQuery }}
-    >
+    <ChatContext.Provider value={{ ...state, requestQuery }}>
       {children}
     </ChatContext.Provider>
   );

@@ -1,7 +1,15 @@
-export * from './Header';
 export * from './Body';
-export * from './Footer';
-export * from './Page';
-export * from './Chat';
-export * from './ButtonGroup';
 export * from './Button';
+export * from './ButtonGroup';
+
+export * from './Chat';
+
+export * from './Footer';
+
+export * from './Header';
+
+export * from './OllamaStatus';
+
+export * from './Page';
+
+export * from './TextBox';
