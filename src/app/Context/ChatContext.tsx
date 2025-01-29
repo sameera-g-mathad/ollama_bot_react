@@ -9,6 +9,7 @@ interface chatRequirementsInterface {
 
 interface chatInterface extends chatRequirementsInterface {
   requestQuery: (query: string) => void;
+  listModels: () => void;
 }
 
 interface childProps {
@@ -28,6 +29,7 @@ const reducer = (state: chatRequirementsInterface, payload: any) => {
     case 'set_chat_from_llm':
       return {
         ...state,
+        isRunning: true,
         chatHistory: state.chatHistory.map((chat, index) => {
           if (index === payload.value[0])
             return React.cloneElement(
@@ -38,6 +40,8 @@ const reducer = (state: chatRequirementsInterface, payload: any) => {
           return chat;
         }),
       };
+    case 'setStatusOff':
+      return { ...state, isRunning: false };
     default:
       return state;
   }
@@ -48,6 +52,7 @@ const ChatContext = createContext<chatInterface>({
   models: [],
   isRunning: false,
   requestQuery: (query: string) => false,
+  listModels: () => false,
 });
 
 export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
@@ -108,20 +113,21 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
         }
       }
     } catch (e) {
-      console.log(e);
+      dispatch({ action: 'setStatusOff' });
     }
   };
 
   const listModels = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/ps`);
+      console.log(response);
     } catch (e) {
-      console.log(e);
+      dispatch({ action: 'setStatusOff' });
     }
   };
 
   return (
-    <ChatContext.Provider value={{ ...state, requestQuery }}>
+    <ChatContext.Provider value={{ ...state, requestQuery, listModels }}>
       {children}
     </ChatContext.Provider>
   );

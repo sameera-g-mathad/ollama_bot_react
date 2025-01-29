@@ -8,7 +8,7 @@ interface buttonProps {
 export const Button: React.FC<buttonProps> = ({ children, callback }) => {
   return (
     <div
-      className="w-8 h-8 p-1 flex justify-center items-center rounded-lg cursor-pointer"
+      className="w-8 h-8 flex justify-center items-center rounded-lg cursor-pointer"
       onClick={callback}
     >
       {children}

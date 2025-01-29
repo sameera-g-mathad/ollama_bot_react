@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useState, useReducer } from 'react';
+import React, { createContext, useState, useReducer, useEffect } from 'react';
 
 interface childProps {
   children: React.ReactElement;
@@ -41,12 +41,16 @@ const themeReducer = (
 
 export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
   const [state, dispatch] = useReducer(themeReducer, {
-    theme: 'system',
+    theme: 'light',
     textSize: 'text-base',
     // lineHeight: 'leading-6',
   });
   const changeTheme = (theme: string) => {
     if (['light', 'dark', 'system'].includes(theme)) {
+      if (theme === 'system')
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
       dispatch({ action: 'themeChange', value: theme });
     }
   };
@@ -62,13 +66,6 @@ export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
     <ThemeContext.Provider
       value={{
         ...state,
-        theme:
-          state.theme === 'system'
-            ? typeof window !== undefined &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light'
-            : state.theme,
         changeTheme,
         changeTextSize,
       }}
