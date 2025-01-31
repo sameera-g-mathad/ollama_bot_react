@@ -12,4 +12,6 @@ export * from './OllamaStatus';
 
 export * from './Page';
 
+export * from './Settings';
+
 export * from './TextBox';
