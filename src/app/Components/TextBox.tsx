@@ -31,7 +31,7 @@ export const TextBox = () => {
         <span className="py-1 flex justify-end">
           <button
             className="text-neutral-300"
-            onClick={(e) => {
+            onClick={() => {
               requestQuery(query);
               setQuery('');
             }}

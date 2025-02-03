@@ -19,7 +19,13 @@ interface childProps {
 const BASE_URL = 'http://localhost:11434';
 const decoder = new TextDecoder();
 
-const reducer = (state: chatRequirementsInterface, payload: any) => {
+const reducer = (
+  state: chatRequirementsInterface,
+  payload: {
+    action: string;
+    value: [number, string] | [React.ReactNode, React.ReactNode] | [];
+  }
+) => {
   switch (payload.action) {
     case 'set_chat':
       return {
@@ -51,7 +57,7 @@ const ChatContext = createContext<chatInterface>({
   chatHistory: [],
   models: [],
   isRunning: false,
-  requestQuery: (query: string) => false,
+  requestQuery: (query: string) => query,
   listModels: () => false,
 });
 
@@ -71,7 +77,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
           React.cloneElement(
             <Chat key={state.chatHistory.length}>
               <div className="flex justify-end">
-                <span className="border p-1 rounded-xl shadow-sm  shadow-neutral-100 rounded-tr-none">
+                <span className="border p-1 rounded-xl shadow-md  shadow-neutral-100">
                   {query}
                 </span>
               </div>
@@ -113,7 +119,8 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
         }
       }
     } catch (e) {
-      dispatch({ action: 'setStatusOff' });
+      dispatch({ action: 'setStatusOff', value: [] });
+      console.log(e);
     }
   };
 
@@ -122,7 +129,8 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
       const response = await fetch(`${BASE_URL}/api/ps`);
       console.log(response);
     } catch (e) {
-      dispatch({ action: 'setStatusOff' });
+      dispatch({ action: 'setStatusOff', value: [] });
+      console.log(e);
     }
   };
 

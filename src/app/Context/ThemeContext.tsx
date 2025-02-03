@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useState, useReducer, useEffect } from 'react';
+import React, { createContext, useReducer } from 'react';
 
 interface childProps {
   children: React.ReactElement;
@@ -58,9 +58,9 @@ export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
     dispatch({ action: 'textSizeChange', value: size });
   };
 
-  const changeLineHeight = (size: string) => {
-    dispatch({ action: 'lineHeight', value: size });
-  };
+  // const changeLineHeight = (size: string) => {
+  //   dispatch({ action: 'lineHeight', value: size });
+  // };
 
   return (
     <ThemeContext.Provider
