@@ -1,5 +1,5 @@
 {
-  "manifest_version": "3",
+  "manifest_version": 3,
   "name": "ollama_bot",
   "version": "1",
   "description": "This is a Simple React app for connecting to a running Ollama to access LLM's",
