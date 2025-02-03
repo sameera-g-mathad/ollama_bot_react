@@ -127,7 +127,6 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
   const listModels = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/ps`);
-      console.log(response);
     } catch (e) {
       dispatch({ action: 'setStatusOff', value: [] });
       console.log(e);
