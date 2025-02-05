@@ -6,7 +6,7 @@ export const OllamaStatus: React.FC = () => {
 
   return (
     <div
-      className={`w-full mt-2 text-sm h-full flex justify-center rounded-t text-white ${
+      className={`w-full h-5 mt-2 text-sm  flex justify-center rounded-t text-white ${
         isRunning ? 'bg-green-400' : 'bg-red-400'
       }`}
     >

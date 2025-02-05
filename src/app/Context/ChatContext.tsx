@@ -39,8 +39,13 @@ const reducer = (
         chatHistory: state.chatHistory.map((chat, index) => {
           if (index === payload.value[0])
             return React.cloneElement(
-              <Chat key={state.chatHistory.length - 1}>
-                <div>{payload.value[1]}</div>
+              <Chat generatedBy={true} key={state.chatHistory.length - 1}>
+                <div className="flex">
+                  {/* <span className="w-3 h-3 mr-5 rounded-full border"></span> */}
+                  <div className="border-none rounded-xl p-3">
+                    {payload.value[1]}
+                  </div>
+                </div>
               </Chat>
             );
           return chat;
@@ -75,15 +80,18 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
         action: 'set_chat',
         value: [
           React.cloneElement(
-            <Chat key={state.chatHistory.length}>
+            <Chat generatedBy={false} key={state.chatHistory.length}>
               <div className="flex justify-end">
-                <span className="border p-1 rounded-xl shadow-md  shadow-neutral-100">
+                <span
+                  className="border p-1 px-3 rounded-xl"
+                  style={{ maxWidth: '70%' }}
+                >
                   {query}
                 </span>
               </div>
             </Chat>
           ),
-          <Chat key={state.chatHistory.length + 1}>
+          <Chat generatedBy={true} key={state.chatHistory.length + 1}>
             <div>{}</div>
           </Chat>,
         ],

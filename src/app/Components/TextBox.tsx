@@ -5,20 +5,30 @@ import ThemeContext from '../Context/ThemeContext';
 
 export const TextBox = () => {
   const [query, setQuery] = useState<string>('');
+  const [textheight, setTextHeight] = useState<number>(30);
   const { requestQuery } = useContext(ChatContext);
   const { theme } = useContext(ThemeContext);
   return (
-    <div className="flex flex-col w-full sm:w-3/6 h-26 border shadow-md shadow-neutral-300 mt-2 rounded-xl">
-      <span className="flex flex-col justify-center p-2 h-full">
+    <div
+      className={` ${
+        theme === 'light' ? 'bg-white' : 'bg-gray-700'
+      } flex flex-col w-full sm:w-1/2 border shadow-sm shadow-neutral-300 rounded-lg`}
+    >
+      <span className="flex justify-start items-center p-2">
         <textarea
-          className="border rounded-lg shadow-sm shadow-neutral-100 outline-none flex pt-2 pl-2 resize-none max-h-32 bg-transparent"
-          placeholder="Type.."
+          style={{ height: `${textheight}px` }}
+          className="border-none rounded-lg outline-none w-full pl-2 resize-none bg-transparent "
+          placeholder="Ask anything..."
           value={query}
           onChange={(e) => {
-            if ((e.target.value, e.target.value !== '\n'))
+            if ((e.target.value, e.target.value !== '\n')) {
               setQuery(e.target.value);
-            else {
+              setTextHeight(() =>
+                e.target.scrollHeight < 100 ? e.target.scrollHeight : 100
+              );
+            } else {
               setQuery('');
+              setTextHeight(30);
             }
           }}
           onKeyDown={(e) => {
@@ -36,6 +46,7 @@ export const TextBox = () => {
               setQuery('');
             }}
           >
+            {/* <span className={`${theme} text-3xl p-1 mr-1`}>+</span> */}
             <Submit theme={theme} />
           </button>
         </span>
