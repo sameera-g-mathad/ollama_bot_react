@@ -9,7 +9,7 @@ export const Chat: React.FC<childProps> = ({ children, generatedBy }) => {
   const { theme } = useContext(ThemeContext);
   return (
     <div
-      className={`p-1 my-2 ${
+      className={`p-1 my-2 rounded-xl ${
         generatedBy ? (theme == 'light' ? 'bg-gray-100' : 'bg-gray-800') : ''
       }`}
     >

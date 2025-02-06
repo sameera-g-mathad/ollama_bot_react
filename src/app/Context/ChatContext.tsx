@@ -83,7 +83,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
             <Chat generatedBy={false} key={state.chatHistory.length}>
               <div className="flex justify-end">
                 <span
-                  className="border p-1 px-3 rounded-xl"
+                  className="border rounded-xl p-1 px-3"
                   style={{ maxWidth: '70%' }}
                 >
                   {query}

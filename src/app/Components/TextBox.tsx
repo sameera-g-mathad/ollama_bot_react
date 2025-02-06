@@ -12,12 +12,12 @@ export const TextBox = () => {
     <div
       className={` ${
         theme === 'light' ? 'bg-white' : 'bg-gray-700'
-      } flex flex-col w-full sm:w-1/2 border shadow-sm shadow-neutral-300 rounded-lg`}
+      } flex flex-col w-full sm:w-1/2 border shadow-sm shadow-neutral-300 rounded-xl`}
     >
       <span className="flex justify-start items-center p-2">
         <textarea
           style={{ height: `${textheight}px` }}
-          className="border-none rounded-lg outline-none w-full pl-2 resize-none bg-transparent "
+          className="outline-none w-full pl-2 resize-none bg-transparent "
           placeholder="Ask anything..."
           value={query}
           onChange={(e) => {
