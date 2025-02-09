@@ -7,7 +7,7 @@ export const OllamaStatus: React.FC = () => {
   return (
     <div
       className={`w-full h-5 mt-2 text-sm  flex justify-center rounded-t text-white ${
-        isRunning ? 'bg-green-400' : 'bg-red-400'
+        isRunning ? 'bg-green-500' : 'bg-red-500'
       }`}
     >
       {response}

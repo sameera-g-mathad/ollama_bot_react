@@ -5,11 +5,16 @@ interface chatRequirementsInterface {
   chatHistory: React.ReactNode[];
   models: string[];
   isRunning: boolean;
+  activeModel: string;
 }
 
 interface chatInterface extends chatRequirementsInterface {
   requestQuery: (query: string) => void;
   listModels: () => void;
+  deleteModel: (modelName: string) => void;
+  addModel: (modelName: string) => void;
+  selectModel: (modelName: string) => void;
+  // checkModel: (modelName: string) => void;
 }
 
 interface childProps {
@@ -23,7 +28,7 @@ const reducer = (
   state: chatRequirementsInterface,
   payload: {
     action: string;
-    value: [number, string] | [React.ReactNode, React.ReactNode] | [];
+    value: any;
   }
 ) => {
   switch (payload.action) {
@@ -51,6 +56,15 @@ const reducer = (
           return chat;
         }),
       };
+    case 'models_list':
+      return {
+        ...state,
+        isRunning: true,
+        models: payload.value,
+        activeModel: payload.value[0],
+      };
+    case 'setActiveModel':
+      return { ...state, isRunning: true, activeModel: payload.value };
     case 'setStatusOff':
       return { ...state, isRunning: false };
     default:
@@ -61,14 +75,20 @@ const reducer = (
 const ChatContext = createContext<chatInterface>({
   chatHistory: [],
   models: [],
+  activeModel: '',
   isRunning: false,
   requestQuery: (query: string) => query,
   listModels: () => false,
+  deleteModel: (modelName: string) => false,
+  addModel: (modelName: string) => false,
+  selectModel: (modelName: string) => false,
+  // checkModel: () => false,
 });
 
 export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
     models: [],
+    activeModel: '',
     isRunning: false,
     chatHistory: [],
   });
@@ -91,7 +111,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
               </div>
             </Chat>
           ),
-          <Chat generatedBy={true} key={state.chatHistory.length + 1}>
+          <Chat generatedBy={false} key={state.chatHistory.length + 1}>
             <div>{}</div>
           </Chat>,
         ],
@@ -101,7 +121,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ model: 'llama3.2', prompt: query }),
+        body: JSON.stringify({ model: state.activeModel, prompt: query }),
       });
 
       if (response.body) {
@@ -134,15 +154,90 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
 
   const listModels = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/api/ps`);
+      const response = await fetch(`${BASE_URL}/api/tags`);
+      if (response.body) {
+        const reader = response.body.getReader();
+        const { done, value } = await reader.read();
+        if (!done) {
+          const models = JSON.parse(decoder.decode(value, { stream: true }))[
+            'models'
+          ];
+          dispatch({
+            action: 'models_list',
+            value: models.map((el: { name: string }) => el.name),
+          });
+        }
+      }
     } catch (e) {
       dispatch({ action: 'setStatusOff', value: [] });
       console.log(e);
     }
   };
 
+  const deleteModel = async (modelName: string) => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/delete`, {
+        method: 'delete',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ name: modelName }),
+      });
+    } catch (error) {
+      dispatch({ action: 'setStatusOff', value: [] });
+      console.log(error);
+    }
+  };
+
+  const addModel = async (modelName: string) => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/pull`, {
+        method: 'Post',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ name: modelName, stream: true }),
+      });
+      console.log(response);
+    } catch (error) {
+      dispatch({ action: 'setStatusOff', value: [] });
+      console.log(error);
+    }
+  };
+
+  const selectModel = (modelName: string) => {
+    dispatch({ action: 'setActiveModel', value: modelName });
+  };
+  // const checkModel = async (modelName: string) => {
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/api/show`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'content-type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ name: modelName }),
+  //     });
+  //     if (response.body) {
+  //       const reader = response.body.getReader();
+  //       const { done, value } = await reader.read();
+  //       console.log(decoder.decode(value, { stream: true }));
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
   return (
-    <ChatContext.Provider value={{ ...state, requestQuery, listModels }}>
+    <ChatContext.Provider
+      value={{
+        ...state,
+        addModel,
+        deleteModel,
+        listModels,
+        requestQuery,
+        selectModel,
+      }}
+    >
       {children}
     </ChatContext.Provider>
   );

@@ -3,7 +3,7 @@ import ThemeContext from '../Context/ThemeContext';
 import logo from './../../../public/Logo.png';
 import ChatContext from '../Context/ChatContext';
 import { SettingSVG } from '../SVG';
-import { Settings } from './index';
+import { SelectModels, Settings } from './index';
 
 export const Header: React.FC = () => {
   const { theme } = useContext(ThemeContext);
@@ -21,14 +21,11 @@ export const Header: React.FC = () => {
         src={logo.src}
         alt="image"
       />
-      <div className="flex w-32 items-center justify-between">
-        <div>Hello</div>
-        <button onClick={() => setSetting((prevState) => !prevState)}>
-          <SettingSVG theme={theme} />
-        </button>
-
-        <Settings clicked={settingClicked} />
-      </div>
+      <SelectModels />
+      <button onClick={() => setSetting((prevState) => !prevState)}>
+        <SettingSVG theme={theme} />
+      </button>
+      <Settings clicked={settingClicked} />
     </div>
   );
 };
