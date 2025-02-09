@@ -24,7 +24,7 @@ export const SelectModels = memo(() => {
       >
         <div
           className={`w-2 h-2 ${
-            activeModel ? 'bg-green-500' : ''
+            activeModel ? 'bg-blue-500' : ''
           } rounded-full m-1`}
         ></div>
         {activeModel}
@@ -46,7 +46,7 @@ export const SelectModels = memo(() => {
               key={i}
               onClick={() => setSelectedModel(el)}
               className={`flex ${
-                selectedModel === el ? 'bg-green-200 border-green-500' : ''
+                selectedModel === el ? 'bg-blue-200 border-blue-500' : ''
               } justify-between p-3 px-4 mt-2 border rounded-lg shadow-sm`}
             >
               <span>{el}</span>
