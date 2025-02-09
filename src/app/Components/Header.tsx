@@ -1,18 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import ThemeContext from '../Context/ThemeContext';
 import logo from './../../../public/Logo.png';
 import ChatContext from '../Context/ChatContext';
 import { SettingSVG } from '../SVG';
 import { SelectModels, Settings } from './index';
 
-export const Header: React.FC = () => {
+export const Header: React.FC = memo(() => {
   const { theme } = useContext(ThemeContext);
   const { listModels } = useContext(ChatContext);
 
   useEffect(() => {
     listModels();
-  });
+  }, []);
   const [settingClicked, setSetting] = useState<boolean>(false);
+  // console.log('working');
 
   return (
     <div className="flex justify-between items-center mx-4">
@@ -28,6 +29,6 @@ export const Header: React.FC = () => {
       <Settings clicked={settingClicked} />
     </div>
   );
-};
+});
 
 Header.displayName = 'Header';

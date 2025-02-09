@@ -24,6 +24,28 @@ interface childProps {
 const BASE_URL = 'http://localhost:11434';
 const decoder = new TextDecoder();
 
+const formatMessage = (message: string): string => {
+  message = message.replace(/^\s*/, '');
+  // Particular for deepseek <think> </think>
+
+  message = message.replace(/<think>/, '').replace(/<\/think>/, '');
+
+  // Check for ###
+  // Check for code snippets
+  if (message.includes('```')) {
+    message = message
+      .replace(/\s```/, '<pre><code>')
+      .replace(/```/, '</code></pre>');
+  }
+
+  // Check for bold letters
+  if (message.includes('**')) {
+    message = message.replace(/\s\*\*/, '<b>').replace(/\*\*/, '</b>');
+  }
+
+  return message;
+};
+
 const reducer = (
   state: chatRequirementsInterface,
   payload: {
@@ -47,9 +69,12 @@ const reducer = (
               <Chat generatedBy={true} key={state.chatHistory.length - 1}>
                 <div className="flex">
                   {/* <span className="w-3 h-3 mr-5 rounded-full border"></span> */}
-                  <div className="border-none rounded-xl p-3">
-                    {payload.value[1]}
-                  </div>
+                  <div
+                    className="border-none rounded-xl p-3 whitespace-pre-line"
+                    dangerouslySetInnerHTML={{ __html: payload.value[1] }}
+                  />
+                  {/* {payload.value[1]}
+                  </div> */}
                 </div>
               </Chat>
             );
@@ -138,6 +163,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
             console.log(JSON.parse(decoder.decode(value, { stream: true })));
             if (!done) {
               message += response;
+              message = formatMessage(message);
               dispatch({
                 action: 'set_chat_from_llm',
                 value: [state.chatHistory.length + 1, message],

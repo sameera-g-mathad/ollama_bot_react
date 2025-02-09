@@ -1,4 +1,4 @@
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import ChatContext from '../Context/ChatContext';
 import { DeleteSVG } from '../SVG';
 import ThemeContext from '../Context/ThemeContext';
@@ -8,8 +8,12 @@ export const SelectModels = memo(() => {
     useContext(ChatContext);
   const { theme } = useContext(ThemeContext);
   const [modelVisible, setModelVisible] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<string>(activeModel);
-  console.log('working');
+  const [selectedModel, setSelectedModel] = useState<string>('');
+
+  useEffect(() => {
+    setSelectedModel(activeModel);
+  }, [activeModel]);
+
   return (
     <div>
       <div
