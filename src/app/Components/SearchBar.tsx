@@ -11,7 +11,7 @@ export const SearchBar: React.FC<searchInterface> = ({ theme, callback }) => {
     <div className="flex justify-between items-center h-16 rounded-lg">
       <input
         className="w-full h-10 bg-transparent border rounded-lg focus:outline-none pl-4 m-4"
-        placeholder="llama..."
+        placeholder="Search Models"
         onChange={(e) => setModelName(e.target.value)}
       />
       <button

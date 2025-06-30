@@ -18,8 +18,8 @@ const ThemeContext = createContext<themeInterface>({
   theme: 'system',
   textSize: 'text-md',
   // lineHeight: '',
-  changeTheme: () => {},
-  changeTextSize: () => {},
+  changeTheme: () => { },
+  changeTextSize: () => { },
   // changeLineHeight: () => {},
 });
 

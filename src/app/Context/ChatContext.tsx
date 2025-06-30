@@ -1,12 +1,23 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useCallback, useReducer } from 'react';
 import { Chat } from '../Components';
 
+export type chatMessage = {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+
 interface chatRequirementsInterface {
-  chatHistory: React.ReactNode[];
+  chatMessages: chatMessage[]
   models: string[];
   isRunning: boolean;
   activeModel: string;
 }
+
+type chatReducerActionTypes =
+  { action: 'setChat', value: [chatMessage, chatMessage] } |
+  { action: 'setChatFromLLM', value: string } |
+  { action: 'setModelsList', value: string[] }
 
 interface chatInterface extends chatRequirementsInterface {
   requestQuery: (query: string) => void;
@@ -14,7 +25,6 @@ interface chatInterface extends chatRequirementsInterface {
   deleteModel: (modelName: string) => void;
   addModel: (modelName: string) => void;
   selectModel: (modelName: string) => void;
-  // checkModel: (modelName: string) => void;
 }
 
 interface childProps {
@@ -26,8 +36,8 @@ const decoder = new TextDecoder();
 
 const formatMessage = (message: string): string => {
   message = message.replace(/^\s*/, '');
-  // Particular for deepseek <think> </think>
 
+  // Particular for deepseek <think> </think>
   message = message.replace(/<think>/, '').replace(/<\/think>/, '');
 
   // Check for ###
@@ -40,7 +50,7 @@ const formatMessage = (message: string): string => {
 
   // Check for bold letters
   if (message.includes('**')) {
-    message = message.replace(/\s\*\*/, '<b>').replace(/\*\*/, '</b>');
+    message = message.replace(/\s\*\*/, '\s<b>').replace(/\*\*/, '</b>');
   }
 
   return message;
@@ -48,48 +58,34 @@ const formatMessage = (message: string): string => {
 
 const reducer = (
   state: chatRequirementsInterface,
-  payload: {
+  payload: chatReducerActionTypes | {
     action: string;
     value: any;
   }
 ) => {
   switch (payload.action) {
-    case 'set_chat':
-      return {
-        ...state,
-        chatHistory: [...state.chatHistory, payload.value[0], payload.value[1]],
-      };
-    case 'set_chat_from_llm':
-      return {
-        ...state,
-        isRunning: true,
-        chatHistory: state.chatHistory.map((chat, index) => {
-          if (index === payload.value[0])
-            return React.cloneElement(
-              <Chat generatedBy={true} key={state.chatHistory.length - 1}>
-                <div className="flex">
-                  {/* <span className="w-3 h-3 mr-5 rounded-full border"></span> */}
-                  <div
-                    className="border-none rounded-xl p-3 whitespace-pre-line"
-                    dangerouslySetInnerHTML={{ __html: payload.value[1] }}
-                  />
-                  {/* {payload.value[1]}
-                  </div> */}
-                </div>
-              </Chat>
-            );
-          return chat;
-        }),
-      };
-    case 'models_list':
+    case 'setChat': {
+      return { ...state, chatMessages: [...state.chatMessages, ...payload.value] }
+    }
+    case 'setChatFromLLM': return {
+      ...state,
+      isRunning: true,
+      chatMessages: [
+        ...state.chatMessages.slice(0, state.chatMessages.length - 1),
+        { role: 'assistant', content: payload.value }
+      ]
+    }
+    case 'setModelsList':
       return {
         ...state,
         isRunning: true,
         models: payload.value,
-        activeModel: payload.value[0],
+        activeModel: localStorage.getItem('activeModel') || payload.value[0],
       };
     case 'setActiveModel':
-      return { ...state, isRunning: true, activeModel: payload.value };
+      localStorage.setItem('activeModel', payload.value)
+      return { ...state, isRunning: true, activeModel: payload.value, chatMessages: [] };
+
     case 'setStatusOff':
       return { ...state, isRunning: false };
     default:
@@ -98,7 +94,7 @@ const reducer = (
 };
 
 const ChatContext = createContext<chatInterface>({
-  chatHistory: [],
+  chatMessages: [],
   models: [],
   activeModel: '',
   isRunning: false,
@@ -115,32 +111,16 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
     models: [],
     activeModel: '',
     isRunning: false,
-    chatHistory: [],
+    chatMessages: []
   });
 
-  const requestQuery = async (query: string) => {
+  const requestCompletion = useCallback(async (query: string) => {
     try {
       if (query === '') return;
       dispatch({
-        action: 'set_chat',
-        value: [
-          React.cloneElement(
-            <Chat generatedBy={false} key={state.chatHistory.length}>
-              <div className="flex justify-end">
-                <span
-                  className="border rounded-xl p-1 px-3"
-                  style={{ maxWidth: '70%' }}
-                >
-                  {query}
-                </span>
-              </div>
-            </Chat>
-          ),
-          <Chat generatedBy={false} key={state.chatHistory.length + 1}>
-            <div>{}</div>
-          </Chat>,
-        ],
-      });
+        action: 'setChat',
+        value: [{ role: 'user', content: query }, { role: 'assistant', content: '' }]
+      })
       const response = await fetch(`${BASE_URL}/api/generate`, {
         method: 'POST',
         headers: {
@@ -148,7 +128,6 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
         },
         body: JSON.stringify({ model: state.activeModel, prompt: query }),
       });
-
       if (response.body) {
         const reader = response.body?.getReader();
         let finish = false;
@@ -160,14 +139,14 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
             const { response, done } = JSON.parse(
               decoder.decode(value, { stream: true })
             );
-            console.log(JSON.parse(decoder.decode(value, { stream: true })));
+            // console.log(JSON.parse(decoder.decode(value, { stream: true })));
             if (!done) {
               message += response;
               message = formatMessage(message);
               dispatch({
-                action: 'set_chat_from_llm',
-                value: [state.chatHistory.length + 1, message],
-              });
+                action: 'setChatFromLLM',
+                value: message
+              })
             }
           }
         }
@@ -176,9 +155,51 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
       dispatch({ action: 'setStatusOff', value: [] });
       console.log(e);
     }
-  };
+  }, [state.activeModel]);
 
-  const listModels = async () => {
+  const requestConversation = useCallback(async (query: string) => {
+    try {
+      if (query === '') return;
+      const response = await fetch(`${BASE_URL}/api/chat`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ model: state.activeModel, messages: [...state.chatMessages, { role: 'user', content: query }] }),
+      });
+      dispatch({
+        action: 'setChat',
+        value: [{ role: 'user', content: query }, { role: 'assistant', content: '' }]
+      })
+      if (response.body) {
+        const reader = response.body?.getReader();
+        let finish = false;
+        let reply = '';
+        while (!finish) {
+          const { done: doneReading, value } = await reader.read();
+          finish = doneReading;
+          if (value !== undefined) {
+            const { message, done } = JSON.parse(
+              decoder.decode(value, { stream: true })
+            );
+            if (!done) {
+              reply += message['content'];
+              reply = formatMessage(reply);
+              dispatch({
+                action: 'setChatFromLLM',
+                value: reply
+              })
+            }
+          }
+        }
+      }
+    } catch (e) {
+      dispatch({ action: 'setStatusOff', value: [] });
+      console.log(e);
+    }
+  }, [state.activeModel, state.chatMessages]);
+
+  const listModels = useCallback(async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/tags`);
       if (response.body) {
@@ -189,18 +210,18 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
             'models'
           ];
           dispatch({
-            action: 'models_list',
+            action: 'setModelsList',
             value: models.map((el: { name: string }) => el.name),
           });
         }
       }
     } catch (e) {
       dispatch({ action: 'setStatusOff', value: [] });
-      console.log(e);
+      // console.log(e);
     }
-  };
+  }, []);
 
-  const deleteModel = async (modelName: string) => {
+  const deleteModel = useCallback(async (modelName: string) => {
     try {
       const response = await fetch(`${BASE_URL}/api/delete`, {
         method: 'delete',
@@ -213,9 +234,9 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
       dispatch({ action: 'setStatusOff', value: [] });
       console.log(error);
     }
-  };
+  }, []);
 
-  const addModel = async (modelName: string) => {
+  const addModel = useCallback(async (modelName: string) => {
     try {
       const response = await fetch(`${BASE_URL}/api/pull`, {
         method: 'Post',
@@ -229,29 +250,11 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
       dispatch({ action: 'setStatusOff', value: [] });
       console.log(error);
     }
-  };
+  }, []);
 
-  const selectModel = (modelName: string) => {
+  const selectModel = useCallback((modelName: string) => {
     dispatch({ action: 'setActiveModel', value: modelName });
-  };
-  // const checkModel = async (modelName: string) => {
-  //   try {
-  //     const response = await fetch(`${BASE_URL}/api/show`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'content-type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ name: modelName }),
-  //     });
-  //     if (response.body) {
-  //       const reader = response.body.getReader();
-  //       const { done, value } = await reader.read();
-  //       console.log(decoder.decode(value, { stream: true }));
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  }, []);
 
   return (
     <ChatContext.Provider
@@ -260,7 +263,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
         addModel,
         deleteModel,
         listModels,
-        requestQuery,
+        requestQuery: requestConversation,
         selectModel,
       }}
     >

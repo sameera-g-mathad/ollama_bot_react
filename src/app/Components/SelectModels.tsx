@@ -18,23 +18,19 @@ export const SelectModels = memo(() => {
     <div>
       <div
         onClick={() => setModelVisible((prev) => !prev)}
-        className={`border ${
-          activeModel ? 'visible' : 'hidden'
-        } rounded-lg p-1 px-3 flex justify-center items-center`}
+        className={`border ${activeModel ? 'visible' : 'hidden'
+          } rounded-lg p-1 px-3 flex justify-center items-center`}
       >
         <div
-          className={`w-2 h-2 ${
-            activeModel ? 'bg-blue-500' : ''
-          } rounded-full m-1`}
+          className={`w-2 h-2 ${activeModel ? 'bg-blue-500' : ''
+            } rounded-full m-1`}
         ></div>
         {activeModel}
       </div>
       <div
-        className={`absolute ${
-          theme === 'light' ? 'bg-white' : 'bg-gray-800'
-        } ${
-          modelVisible ? 'visible' : 'hidden'
-        } sm:w-1/2 w-full h-1/2 top-1/2 left-1/2 rounded-lg transform -translate-x-1/2 -translate-y-1/2 border`}
+        className={`absolute ${theme === 'light' ? 'bg-white' : 'bg-gray-800'
+          } ${modelVisible ? 'visible' : 'hidden'
+          } sm:w-1/2 w-full h-1/2 top-1/2 left-1/2 rounded-lg transform -translate-x-1/2 -translate-y-1/2 border`}
       >
         <SearchBar theme={theme} callback={addModel} />
         <label className="pl-6 text-sm">
@@ -45,11 +41,10 @@ export const SelectModels = memo(() => {
             <div
               key={i}
               onClick={() => setSelectedModel(el)}
-              className={`flex ${
-                selectedModel === el ? 'bg-blue-200 border-blue-500' : ''
-              } justify-between p-3 px-4 mt-2 border rounded-lg shadow-sm`}
+              className={`flex ${selectedModel === el ? 'bg-blue-50 border-blue-500' : ''
+                } justify-between p-3 px-4 mt-2 border rounded-lg shadow-sm`}
             >
-              <span>{el}</span>
+              <span className='font-bold'>{el}</span>
               <button onDoubleClick={() => deleteModel(el)}>
                 <DeleteSVG theme={'red'} />
               </button>

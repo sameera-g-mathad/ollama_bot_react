@@ -11,9 +11,8 @@ export const Settings: React.FC<settingInterface> = ({ clicked }) => {
   const { theme, changeTheme, changeTextSize } = useContext(ThemeContext);
   return (
     <div
-      className={`w-44  absolute border shadow-sm  shadow-neutral-100 rounded-lg right-2 top-10 ${
-        theme === 'light' ? 'bg-white' : 'bg-gray-700'
-      } ${clicked ? 'visible' : 'hidden'}`}
+      className={`w-44  absolute border shadow-sm  shadow-neutral-100 rounded-lg right-3 top-12 ${theme === 'light' ? 'bg-white' : 'bg-gray-700'
+        } ${clicked ? 'visible' : 'hidden'}`}
     >
       <ButtonGroup>
         <Button callback={() => changeTheme('light')}>

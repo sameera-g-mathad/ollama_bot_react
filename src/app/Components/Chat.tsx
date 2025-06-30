@@ -1,19 +1,34 @@
-import React, { useContext } from 'react';
+import React, { memo, useContext } from 'react';
+import { chatMessage } from '../Context/ChatContext';
 import ThemeContext from '../Context/ThemeContext';
-interface childProps {
-  children: React.ReactElement;
-  generatedBy: boolean;
+
+
+export const Chat: React.FC<chatMessage> = memo(({ role, content }) => {
+  const { theme } = useContext(ThemeContext);
+  if (role === 'user') return <UserChat content={content} />
+  return <AssistantChat content={content} />
+});
+
+interface contentInterface {
+  content: string;
 }
 
-export const Chat: React.FC<childProps> = ({ children, generatedBy }) => {
-  const { theme } = useContext(ThemeContext);
-  return (
+const AssistantChat: React.FC<contentInterface> = memo(({ content }) => {
+  return <div className="flex">
     <div
-      className={`p-1 my-2 rounded-xl ${
-        generatedBy ? (theme == 'light' ? 'bg-gray-100' : 'bg-gray-800') : ''
-      }`}
+      className="border-none rounded-xl p-3 whitespace-pre-line"
+      dangerouslySetInnerHTML={{ __html: content }}
+    />
+  </div>
+})
+
+const UserChat: React.FC<contentInterface> = memo(({ content }) => {
+  return <div className="flex justify-end">
+    <span
+      className="border rounded-xl p-1 px-3"
+      style={{ maxWidth: '70%' }}
     >
-      {children}
-    </div>
-  );
-};
+      {content}
+    </span>
+  </div>
+});
