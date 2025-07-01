@@ -1,11 +1,11 @@
-import React, { createContext, useCallback, useReducer } from 'react';
-import { Chat } from '../Components';
+'use client'
+import React, { createContext, useCallback, useEffect, useReducer, useRef } from 'react';
+import { formatMessage, DB } from '../Utils';
 
 export type chatMessage = {
   role: 'user' | 'assistant';
   content: string;
 }
-
 
 interface chatRequirementsInterface {
   chatMessages: chatMessage[]
@@ -20,7 +20,7 @@ type chatReducerActionTypes =
   { action: 'setModelsList', value: string[] }
 
 interface chatInterface extends chatRequirementsInterface {
-  requestQuery: (query: string) => void;
+  requestQuery: (query: string, uuid: string) => void;
   listModels: () => void;
   deleteModel: (modelName: string) => void;
   addModel: (modelName: string) => void;
@@ -33,28 +33,6 @@ interface childProps {
 
 const BASE_URL = 'http://localhost:11434';
 const decoder = new TextDecoder();
-
-const formatMessage = (message: string): string => {
-  message = message.replace(/^\s*/, '');
-
-  // Particular for deepseek <think> </think>
-  message = message.replace(/<think>/, '').replace(/<\/think>/, '');
-
-  // Check for ###
-  // Check for code snippets
-  if (message.includes('```')) {
-    message = message
-      .replace(/\s```/, '<pre><code>')
-      .replace(/```/, '</code></pre>');
-  }
-
-  // Check for bold letters
-  if (message.includes('**')) {
-    message = message.replace(/\s\*\*/, '\s<b>').replace(/\*\*/, '</b>');
-  }
-
-  return message;
-};
 
 const reducer = (
   state: chatRequirementsInterface,
@@ -98,7 +76,7 @@ const ChatContext = createContext<chatInterface>({
   models: [],
   activeModel: '',
   isRunning: false,
-  requestQuery: (query: string) => query,
+  requestQuery: (query: string, uuid: string) => query,
   listModels: () => false,
   deleteModel: (modelName: string) => false,
   addModel: (modelName: string) => false,
@@ -107,6 +85,16 @@ const ChatContext = createContext<chatInterface>({
 });
 
 export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
+  const db = useRef(new DB('OllamaBot', 1)).current;
+  useEffect(() => {
+    const initDB = async () => {
+      await db.open()
+      await db.createObjStore('chats', { keyPath: 'uuid' })
+      await db.createObjStore('conversations', { keyPath: 'id', autoIncrement: true }, true, 'uuid')
+    }
+    initDB()
+  }, [])
+
   const [state, dispatch] = useReducer(reducer, {
     models: [],
     activeModel: '',
@@ -157,7 +145,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
     }
   }, [state.activeModel]);
 
-  const requestConversation = useCallback(async (query: string) => {
+  const requestConversation = useCallback(async (query: string, uuid: string) => {
     try {
       if (query === '') return;
       const response = await fetch(`${BASE_URL}/api/chat`, {
@@ -192,6 +180,12 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
             }
           }
         }
+        if (await db.get('chats', uuid) === undefined) {
+          db.add('chats', { uuid, createdAt: new Date().toLocaleDateString() })
+        }
+
+        db.add('conversations', { uuid, role: 'user', content: query, createdAt: new Date().toLocaleDateString() })
+        db.add('conversations', { uuid, role: 'assistant', content: reply, createdAt: new Date().toLocaleDateString() })
       }
     } catch (e) {
       dispatch({ action: 'setStatusOff', value: [] });

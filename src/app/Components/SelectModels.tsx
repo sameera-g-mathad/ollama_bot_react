@@ -18,7 +18,7 @@ export const SelectModels = memo(() => {
     <div>
       <div
         onClick={() => setModelVisible((prev) => !prev)}
-        className={`border ${activeModel ? 'visible' : 'hidden'
+        className={`border absolute left-1/2 transfrom -translate-x-1/2 top-2 ${activeModel ? 'visible' : 'hidden'
           } rounded-lg p-1 px-3 flex justify-center items-center`}
       >
         <div

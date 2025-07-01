@@ -2,6 +2,8 @@ export * from './DarkThemeSVG';
 export * from './DefaultThemeSVG';
 export * from './DeleteSVG';
 export * from './LightThemeSVG';
+export * from './OllamaLogoSVG';
 export * from './PlusSVG';
 export * from './SettingSVG';
+export * from './SidbarSVG';
 export * from './SubmitSVG';

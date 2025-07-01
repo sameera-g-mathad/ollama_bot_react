@@ -1,7 +1,8 @@
 import React, { useContext, useRef, useEffect, memo } from 'react';
+import { Chat } from './Chat';
 import ChatContext from '../Context/ChatContext';
 
-export const Body: React.FC = memo(() => {
+export const Content: React.FC = memo(() => {
   const { chatMessages } = useContext(ChatContext);
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -15,10 +16,14 @@ export const Body: React.FC = memo(() => {
       className="flex justify-center overflow-y-scroll leading-7"
     >
       <div className=" sm:w-1/2 w-full">
-        <span>Welcome</span>
+        {
+          chatMessages.map((el, index) => {
+            return <Chat key={index} role={el.role} content={el.content} />
+          })
+        }
       </div>
     </div>
   );
 });
 
-Body.displayName = 'Body';
+Content.displayName = 'Content';

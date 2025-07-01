@@ -2,8 +2,8 @@ import React, { memo, useContext, useEffect, useState } from 'react';
 import ThemeContext from '../Context/ThemeContext';
 import logo from './../../../public/Logo.png';
 import ChatContext from '../Context/ChatContext';
-import { SettingSVG } from '../SVG';
-import { SelectModels, Settings } from './index';
+import { SettingSVG, SideBarSVG } from '../SVG';
+import { Button, SelectModels, Settings, SideBar } from './index';
 
 export const Header: React.FC = memo(() => {
   const { theme } = useContext(ThemeContext);
@@ -13,19 +13,25 @@ export const Header: React.FC = memo(() => {
     listModels();
   }, []);
   const [settingClicked, setSetting] = useState<boolean>(false);
-  // console.log('working');
+  const [sidebarClicked, setSidebar] = useState<boolean>(false);
 
   return (
     <div className="flex justify-between items-center mx-4">
-      <img
-        className="w-10 h-10 border rounded-full"
-        src={logo.src}
-        alt="image"
-      />
+      <div className='flex items-center justify-between sm:gap-10 gap-5 z-10'>
+        <img
+          className="w-10 h-10 border rounded-full"
+          src={logo.src}
+          alt="image"
+        />
+        <Button callback={() => setSidebar((prevState) => !prevState)}>
+          <SideBarSVG theme={theme} />
+        </Button>
+      </div>
+      <SideBar isOpen={sidebarClicked} />
       <SelectModels />
-      <button onClick={() => setSetting((prevState) => !prevState)}>
+      <Button callback={() => setSetting((prevState) => !prevState)}>
         <SettingSVG theme={theme} />
-      </button>
+      </Button>
       <Settings clicked={settingClicked} />
     </div>
   );

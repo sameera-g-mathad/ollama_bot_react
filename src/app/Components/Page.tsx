@@ -1,7 +1,12 @@
 import React, { useContext } from 'react';
 import { Body, Footer, Header } from './index';
 import ThemeContext from '../Context/ThemeContext';
-export const Page: React.FC = () => {
+
+interface childProps {
+  children: React.ReactNode;
+}
+
+export const Page: React.FC<childProps> = ({ children }) => {
   const { theme, textSize } = useContext(ThemeContext);
   return (
     <div
@@ -9,7 +14,7 @@ export const Page: React.FC = () => {
         } ${textSize}`}
     >
       <Header />
-      <Body />
+      {children}
       <Footer />
     </div>
   );
