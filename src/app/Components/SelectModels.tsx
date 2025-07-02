@@ -3,6 +3,7 @@ import ChatContext from '../Context/ChatContext';
 import { DeleteSVG } from '../SVG';
 import ThemeContext from '../Context/ThemeContext';
 import { SearchBar } from './SearchBar';
+
 export const SelectModels = memo(() => {
   const { activeModel, models, deleteModel, addModel, selectModel } =
     useContext(ChatContext);
@@ -18,7 +19,7 @@ export const SelectModels = memo(() => {
     <div>
       <div
         onClick={() => setModelVisible((prev) => !prev)}
-        className={`border absolute left-1/2 transfrom -translate-x-1/2 top-2 ${activeModel ? 'visible' : 'hidden'
+        className={`border absolute sm:left-1/2 left-[70%] transfrom -translate-x-1/2 top-2 ${activeModel ? 'visible' : 'hidden'
           } rounded-lg p-1 px-3 flex justify-center items-center`}
       >
         <div
@@ -34,7 +35,7 @@ export const SelectModels = memo(() => {
       >
         <SearchBar theme={theme} callback={addModel} />
         <label className="pl-6 text-sm">
-          Fetching new models may take some time. Check later
+          Fetching new models may take some time. Check later for updated list.
         </label>
         <div className="overflow-auto mx-4">
           {models.map((el, i) => (

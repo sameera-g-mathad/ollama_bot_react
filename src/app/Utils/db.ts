@@ -81,26 +81,58 @@ export class DB {
     const store = this.getStore(storeName, 'readwrite');
     const request = this.store.put(obj);
   }
-  delete(storeName: string, key: string): void {
-    const store = this.getStore(storeName, 'readwrite');
-    const request = this.store.delete(key);
+  delete(
+    storeName: string,
+    key: string,
+    index: boolean = false,
+    indexName?: string
+  ): void {
+    this.getStore(storeName, 'readwrite');
+    let request;
+    if (index && indexName) {
+      const idxStore = this.store.index(indexName);
+      request = idxStore.openCursor(IDBKeyRange.only(key));
+      request.onsuccess = (event: any) => {
+        const cursor = event.target?.result;
+        if (cursor) {
+          cursor.delete();
+          cursor.continue();
+        }
+      };
+    } else request = this.store.delete(key);
   }
 
   get(
     storeName: string,
     key: number | string,
-    method?: 'all',
     index: boolean = false
   ): Promise<any> {
     const store = this.getStore(storeName, 'readonly');
     return new Promise((resolve, reject) => {
-      let request;
-      if (method) {
-        request = this.store.getAll(key);
-      } else {
-        request = this.store.get(key);
-      }
+      const request = this.store.get(key);
       request.onsuccess = () => resolve(request.result);
+      request.onerror = (error) => {
+        console.warn(error);
+        reject(error);
+      };
+    });
+  }
+  getAll(
+    storeName: string,
+    key?: number | string,
+    index: boolean = false,
+    indexName?: string
+  ): Promise<any> {
+    const store = this.getStore(storeName, 'readonly');
+    return new Promise((resolve, reject) => {
+      let request;
+      if (index && indexName) {
+        const idxStore = this.store.index(indexName);
+        request = idxStore.getAll(key);
+      } else request = this.store.getAll(key);
+      request.onsuccess = () => {
+        resolve(request.result);
+      };
       request.onerror = (error) => {
         console.warn(error);
         reject(error);

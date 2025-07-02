@@ -3,7 +3,6 @@ import { useRouter } from 'next/navigation';
 import ChatContext from '../Context/ChatContext';
 import { Submit } from '../SVG';
 import ThemeContext from '../Context/ThemeContext';
-import { randomUUID } from '../Utils';
 
 export const TextBox = () => {
   const router = useRouter()
@@ -11,12 +10,6 @@ export const TextBox = () => {
   const [textheight, setTextHeight] = useState<number>(30);
   const { requestQuery } = useContext(ChatContext);
   const { theme } = useContext(ThemeContext);
-  const onClick = () => {
-    const uuid = randomUUID()
-    // router.push(`chats/${uuid}`)
-    requestQuery(query, uuid);
-    setQuery('')
-  }
   return (
     <div
       className={` ${theme === 'light' ? 'bg-white' : 'bg-gray-700'
@@ -40,13 +33,20 @@ export const TextBox = () => {
             }
           }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') onClick();
+            if (e.key === 'Enter') {
+              requestQuery(query);
+              setQuery('')
+            }
           }}
         />
         <span className="py-1 flex justify-end">
           <button
             className="text-neutral-300"
-            onClick={() => onClick()}
+            onClick={() => {
+              requestQuery(query);
+              setQuery('')
+            }
+            }
           >
             {/* <span className={`${theme} text-3xl p-1 mr-1`}>+</span> */}
             <Submit theme={theme} />
