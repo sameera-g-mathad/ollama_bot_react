@@ -4,6 +4,11 @@ interface submitInterface {
   theme: string;
 }
 
+/**
+ *  This component renders an SVG icon.
+ * @param theme - The theme of the application, either 'light' or 'dark'. 
+ * @returns 
+ */
 export const Submit: React.FC<submitInterface> = ({ theme }) => {
   return (
     <svg

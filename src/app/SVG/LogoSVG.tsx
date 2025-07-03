@@ -1,5 +1,12 @@
 import React from "react";
 import { colorInterface } from './interface';
+
+/**
+ *  This component renders an SVG icon.
+ * @param theme - The theme of the application, either 'light' or 'dark'. 
+ * @param className - Optional CSS class name for additional styling.
+ * @returns 
+ */
 export const LogoSVG: React.FC<colorInterface & { className?: string }> = ({ className, theme }) => {
     const fillColor = theme === 'light' ? '#000000' : '#ffffff'
     return <svg className={`w-8 h-8 ${className}`} viewBox="0 0 396 397" fill="none" xmlns="http://www.w3.org/2000/svg">

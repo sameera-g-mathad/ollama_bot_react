@@ -7,6 +7,14 @@ import { Button } from "./Button";
 interface sidebarInterface {
     isOpen: boolean
 }
+
+/**
+ * This component renders a sidebar that displays the chat history.
+ * It allows users to select a conversation or delete it by double-clicking.
+ * The sidebar's appearance changes based on the current theme and whether it is open or closed.
+ * @param isOpen A boolean indicating whether the sidebar is open or closed.
+ * @returns A React component that displays the sidebar with chat history.
+ */
 export const SideBar: React.FC<sidebarInterface> = memo(({ isOpen }) => {
     const { theme } = useContext(ThemeContext)
     const { chatHistory, deleteChat, setConversation } = useContext(ChatContext)

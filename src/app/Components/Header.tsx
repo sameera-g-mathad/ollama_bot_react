@@ -1,10 +1,15 @@
 import React, { memo, useContext, useEffect, useState } from 'react';
 import ThemeContext from '../Context/ThemeContext';
-import logo from './../../../public/MainLogo.png';
 import ChatContext from '../Context/ChatContext';
 import { LogoSVG, NewChatSVG, SettingSVG, SideBarSVG } from '../SVG';
 import { Button, SelectModels, Settings, SideBar } from './index';
 
+/**
+ * This component renders the header of the application.
+ * It includes the logo, buttons for new chat and settings, and a sidebar.
+ * The header is styled to be responsive and adjusts based on the theme.
+ * @returns A React component that displays the header of the application.
+ */
 export const Header: React.FC = memo(() => {
   const { theme } = useContext(ThemeContext);
   const { listModels, newChat } = useContext(ChatContext);
@@ -19,11 +24,6 @@ export const Header: React.FC = memo(() => {
     <div className="flex justify-between items-center mx-4">
       <div className='flex items-center justify-between sm:gap-5 gap-2 z-10'>
         <LogoSVG theme={theme} />
-        {/* <img
-          className="w-10 h-10 border rounded-full"
-          src={logo.src}
-          alt="image"
-        /> */}
         <Button callback={() => setSidebar((prevState) => !prevState)}>
           <SideBarSVG theme={theme} />
         </Button>

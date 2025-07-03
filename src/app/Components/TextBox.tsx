@@ -4,6 +4,13 @@ import ChatContext from '../Context/ChatContext';
 import { Submit } from '../SVG';
 import ThemeContext from '../Context/ThemeContext';
 
+/**
+ * This component renders a text box for user input in the chat application.
+ * It allows users to type their queries, submit them by pressing Enter or clicking the submit button,
+ * and automatically adjusts the height of the text area based on the content.
+ * The text box is styled based on the current theme (light or dark).
+ * @returns A React component that renders a text box for user input.
+ */
 export const TextBox = () => {
   const router = useRouter()
   const [query, setQuery] = useState<string>('');

@@ -20,6 +20,7 @@ export const formatMessage = (message: string): string => {
   return message;
 };
 
+// create a random UUID
 export const randomUUID = () => {
   return crypto.randomUUID();
 };

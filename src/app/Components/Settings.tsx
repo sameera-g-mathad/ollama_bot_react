@@ -7,6 +7,14 @@ interface settingInterface {
   clicked: boolean;
 }
 
+/**
+ * 
+ * @param clickedd - A boolean indicating whether the settings menu is visible or not.
+ * This component renders a settings menu that allows users to change the theme and text size.
+ * It includes buttons for light, dark, and system themes, as well as options for different
+ * text sizes (small, medium, large). 
+ * @returns 
+ */
 export const Settings: React.FC<settingInterface> = ({ clicked }) => {
   const { theme, changeTheme, changeTextSize } = useContext(ThemeContext);
   return (

@@ -4,22 +4,31 @@ import ChatContext from '../Context/ChatContext';
 import { LogoSVG } from '../SVG';
 import ThemeContext from '../Context/ThemeContext';
 
+/**
+ * This component renders the chat content area.
+ * It displays a list of chat messages and scrolls to the bottom when new messages are added.
+ * If there are no messages, it shows a welcome message with the logo.
+ * @returns A React component that displays the chat content.
+ */
 export const Content: React.FC = memo(() => {
   const { theme } = useContext(ThemeContext)
   const { chatMessages } = useContext(ChatContext);
   const scrollRef = useRef<HTMLDivElement>(null);
+  // This ref is used to scroll the chat messages container to the bottom when new messages are added.
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [chatMessages]);
+
   return (
     <div
       ref={scrollRef}
       className="flex justify-center overflow-y-scroll leading-7"
     >
       <div className=" sm:w-1/2 w-full">
-        {
+        { // If there are chat messages, map through them and render each Chat component.
+          // Otherwise, display a welcome message with the logo.
           chatMessages.length > 0 ?
             chatMessages.map((el, index) => {
               return <Chat key={index} role={el.role} content={el.content} />

@@ -5,6 +5,12 @@ interface buttonProps {
   callback: () => void;
 }
 
+/**
+ * 
+ * @param children - The content to be displayed inside the button.
+ * @param callback - The function to be called when the button is clicked.
+ * @returns 
+ */
 export const Button: React.FC<buttonProps> = ({ children, callback }) => {
   return (
     <div

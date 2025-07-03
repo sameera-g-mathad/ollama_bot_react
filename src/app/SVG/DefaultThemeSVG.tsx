@@ -1,6 +1,11 @@
 import React from 'react';
 import { colorInterface } from './interface';
 
+/**
+ *  This component renders an SVG icon.
+ * @param theme - The theme of the application, either 'light' or 'dark'. 
+ * @returns 
+ */
 export const DefaultThemeSVG: React.FC<colorInterface> = ({ theme }) => {
   const color = theme === 'light' ? '#000000' : '#ffffff';
   return (

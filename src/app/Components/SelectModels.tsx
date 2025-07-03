@@ -4,6 +4,13 @@ import { DeleteSVG } from '../SVG';
 import ThemeContext from '../Context/ThemeContext';
 import { SearchBar } from './SearchBar';
 
+
+/**
+ * This component allows users to select and manage models for the chat application.
+ * It displays a list of available models, allows users to add new models, delete existing ones,
+ * and select an active model for the chat.
+ * @returns A React component that renders the model selection interface.
+ */
 export const SelectModels = memo(() => {
   const { activeModel, models, deleteModel, addModel, selectModel } =
     useContext(ChatContext);

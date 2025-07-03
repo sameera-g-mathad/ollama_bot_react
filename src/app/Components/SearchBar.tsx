@@ -5,6 +5,10 @@ interface searchInterface {
   theme: string;
   callback: (modelName: string) => void;
 }
+
+/**
+ * This component renders a search bar for model names.
+ */
 export const SearchBar: React.FC<searchInterface> = ({ theme, callback }) => {
   const [model, setModelName] = useState<string>('');
   return (

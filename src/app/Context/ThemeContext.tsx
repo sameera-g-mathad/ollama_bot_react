@@ -36,6 +36,8 @@ const themeReducer = (
 };
 
 export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
+  // I added useEffect here, since I was getting an error that LocalStorage is not defined,
+  // by Next.js.
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
     const savedTextSize = localStorage.getItem('textSize');
@@ -46,6 +48,7 @@ export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
     theme: 'light',
     textSize: 'text-sm',
   });
+  // This is a reference to the current theme, so that we can use it in the components.
   const changeTheme = (theme: string) => {
     if (['light', 'dark', 'system'].includes(theme)) {
       if (theme === 'system')
@@ -55,6 +58,7 @@ export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
       dispatch({ action: 'themeChange', value: theme });
     }
   };
+  // This is a reference to the current text size, so that we can use it in the components.
   const changeTextSize = (size: string) => {
     dispatch({ action: 'textSizeChange', value: size });
   };
