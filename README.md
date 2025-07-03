@@ -81,6 +81,20 @@ This project was inspired by an chrome extenstion call ![Page Assist](https://ch
 
 ![status-indicator](readme_images/status_indicator.png)
 
+## Resources used:
+
+- [Ollama Documentation](https://ollama.com/docs) - Official documentation for Ollama.
+- [Ollama CORS and Port Binding](https://objectgraph.com/blog/ollama-cors/) - A guide on how to handle CORS issues with Ollama.
+- [Netlify](https://www.netlify.com/) - Used to deploy the application.
+- [Design.com](https://www.design.com/) - Used to create the logo for the application.
+- [Figma](https://www.figma.com/) - Used to customize the logo for the application.
+- [Postman](https://www.postman.com/) - Used to test the Ollama API endpoints.
+- [CloudConvert](https://cloudconvert.com/) - Used to convert the SVG logo to ICO format.
+- [SVG Repo](https://www.svgrepo.com/) - Used for svg icons in the application.
+- [EZGIF](https://ezgif.com/maker) - Used to create the GIFs for the README file.
+- [Canva](https://www.canva.com/) - Used to create the image (old logo) for this project.
+- LLM's and Internet in general in case of any issues found during the development of this project.
+
 ## Next Steps
 
 Create a extension for the Ollama Bot that allows users to interact with the AI model in web applications. The extension should be able to send messages to the AI model and receive responses, allowing users to have conversations with the AI model in real-time. Also, optimise the code for better performance and user experience.
