@@ -83,4 +83,4 @@ This project was inspired by an chrome extenstion call ![Page Assist](https://ch
 
 ## Next Steps
 
-Create a extension for the Ollama Bot that allows users to interact with the AI model in web applications. The extension should be able to send messages to the AI model and receive responses, allowing users to have conversations with the AI model in real-time.
+Create a extension for the Ollama Bot that allows users to interact with the AI model in web applications. The extension should be able to send messages to the AI model and receive responses, allowing users to have conversations with the AI model in real-time. Also, optimise the code for better performance and user experience.

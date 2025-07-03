@@ -11,7 +11,7 @@ import { SearchBar } from './SearchBar';
  * and select an active model for the chat.
  * @returns A React component that renders the model selection interface.
  */
-export const SelectModels = memo(() => {
+export const SelectModels: React.FC = memo(() => {
   const { activeModel, models, deleteModel, addModel, selectModel } =
     useContext(ChatContext);
   const { theme } = useContext(ThemeContext);
@@ -26,8 +26,8 @@ export const SelectModels = memo(() => {
     <div>
       <div
         onClick={() => setModelVisible((prev) => !prev)}
-        className={`border absolute sm:left-1/2 left-[70%] transfrom -translate-x-1/2 top-2 ${activeModel ? 'visible' : 'hidden'
-          } rounded-lg p-1 px-2 flex justify-center items-center tracking-wide font-medium`}
+        className={`border  absolute sm:left-1/2 left-[70%] transfrom -translate-x-1/2 top-2 ${activeModel ? 'visible' : 'hidden'
+          } rounded-lg p-1 px-2 flex justify-center items-center tracking-wide font-medium  cursor-pointer`}
       >
         <div
           className={`w-2 h-2 ${activeModel ? 'bg-blue-500' : ''
@@ -80,3 +80,5 @@ export const SelectModels = memo(() => {
     </div>
   );
 });
+
+SelectModels.displayName = 'SelectModels'

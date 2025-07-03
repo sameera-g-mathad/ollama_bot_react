@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useEffect, useReducer, useRef } from 'react';
+import React, { createContext, useEffect, useReducer } from 'react';
 
 interface childProps {
   children: React.ReactElement;
@@ -76,5 +76,7 @@ export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
+
+ThemeContextProvider.displayName = 'ThemeContextProvider'
 
 export default ThemeContext;

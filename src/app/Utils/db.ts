@@ -112,14 +112,14 @@ export class DB {
 
   // This method is used to add an object to the specified object store.
   add(storeName: string, obj: object): void {
-    const store = this.getStore(storeName, 'readwrite');
-    const request = this.store.add(obj);
+    this.getStore(storeName, 'readwrite');
+    this.store.add(obj);
   }
 
   // This method is used to update an object in the specified object store.
   put(storeName: string, obj: object): void {
-    const store = this.getStore(storeName, 'readwrite');
-    const request = this.store.put(obj);
+    this.getStore(storeName, 'readwrite');
+    this.store.put(obj);
   }
 
   // This method is used to delete an object from the specified object store.
@@ -137,6 +137,7 @@ export class DB {
     if (index && indexName) {
       const idxStore = this.store.index(indexName);
       request = idxStore.openCursor(IDBKeyRange.only(key));
+      /* eslint-disable @typescript-eslint/no-explicit-any*/
       request.onsuccess = (event: any) => {
         const cursor = event.target?.result;
         if (cursor) {
@@ -150,12 +151,8 @@ export class DB {
 
   // This method is used to get an object from the specified object store.
   // It takes the store name, key, and an optional index parameter.
-  get(
-    storeName: string,
-    key: number | string,
-    index: boolean = false
-  ): Promise<any> {
-    const store = this.getStore(storeName, 'readonly');
+  get(storeName: string, key: number | string): Promise<any> {
+    this.getStore(storeName, 'readonly');
     return new Promise((resolve, reject) => {
       const request = this.store.get(key);
       request.onsuccess = () => resolve(request.result);
@@ -174,13 +171,14 @@ export class DB {
    * @param indexName Index name to be used for retrieval if index is true.
    * @returns
    */
+  /* eslint-disable @typescript-eslint/no-unused-vars*/
   getAll(
     storeName: string,
     key?: number | string,
     index: boolean = false,
     indexName?: string
   ): Promise<any> {
-    const store = this.getStore(storeName, 'readonly');
+    this.getStore(storeName, 'readonly');
     return new Promise((resolve, reject) => {
       let request;
       if (index && indexName) {

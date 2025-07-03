@@ -1,5 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useContext, useState } from 'react';
 import ChatContext from '../Context/ChatContext';
 import { Submit } from '../SVG';
 import ThemeContext from '../Context/ThemeContext';
@@ -12,7 +11,6 @@ import ThemeContext from '../Context/ThemeContext';
  * @returns A React component that renders a text box for user input.
  */
 export const TextBox = () => {
-  const router = useRouter()
   const [query, setQuery] = useState<string>('');
   const [textheight, setTextHeight] = useState<number>(30);
   const { requestQuery } = useContext(ChatContext);

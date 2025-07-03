@@ -1,7 +1,6 @@
 'use client'
 import React, { createContext, useCallback, useEffect, useReducer, useRef } from 'react';
 import { formatMessage, DB, randomUUID } from '../Utils';
-import { deprecate } from 'util';
 
 // This file defines the ChatContext, which provides state and functions for managing chat messages, models, and conversations in a React application.
 // It includes types for chat messages, conversations, and the context interface, as well as a reducer function to handle state updates.
@@ -14,6 +13,7 @@ export type conversation = {
   title: string;
   createdAt: Date;
 }
+
 
 interface chatRequirementsInterface {
   chatMessages: chatMessage[],
@@ -29,7 +29,7 @@ type chatReducerActionTypes =
   { action: 'setModelsList', value: string[] } |
   { action: 'setActiveModel', value: string } |
   { action: 'setStatusOff' } |
-  { action: 'setConversation', value: any[] } |
+  { action: 'setConversation', value: chatMessage[] } |
   { action: 'setAllChats', value: conversation[] } |
   { action: 'setNewChat' }
 
@@ -65,7 +65,8 @@ const reducer = (
       isRunning: true,
       chatMessages: [
         ...state.chatMessages.slice(0, state.chatMessages.length - 1), // remove the last assistant message
-        { role: 'assistant' as 'assistant', content: payload.value }
+        /* eslint-disable @typescript-eslint/prefer-as-const */
+        { role: ('assistant' as 'assistant'), content: payload.value }
       ]
     }
     case 'setModelsList':
@@ -91,6 +92,7 @@ const reducer = (
   }
 };
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const ChatContext = createContext<chatInterface>({
   chatMessages: [],
   chatHistory: [],
@@ -110,6 +112,8 @@ const ChatContext = createContext<chatInterface>({
 export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
   const db = useRef(new DB('OllamaBot', 1)).current;
   const uuid = useRef<string>(null);
+
+  /* eslint-disable react-hooks/exhaustive-deps */
   const getAllChats = useCallback(async () => {
     const chats = await db.getAll('chats')
 
@@ -121,8 +125,9 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
       return dateB - dateA
     })
     dispatch({ action: 'setAllChats', value: chats })
-  }
-    , [])
+  }, [])
+
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     // Initialize the database and create object stores for chats and conversations. This will throw warnings if the 
     // object stores already exist, but that's okay since we are just ensuring they are there.
@@ -198,6 +203,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
 
   // This method is used to request a conversation with the LLM.
   // It sends a user query and receives a response from the LLM.
+  /* eslint-disable react-hooks/exhaustive-deps */
   const requestConversation = useCallback(async (query: string) => {
     try {
       // If the query is empty, do not send a request.
@@ -254,7 +260,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
         // If the chat does not exist in the database, we need to create a new chat.
         // We will use the uuid to identify the chat and save the conversation.
         if (await db.get('chats', uuid.current) === undefined) {
-          // Generate a title for the chat using the LLM.
+          // Generate a title for the chat using the LLM. Active Model itself is used for title generation.
           const title = await fetch(`${BASE_URL}/api/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -313,14 +319,15 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
       }
     } catch (e) {
       dispatch({ action: 'setStatusOff' });
-      // console.log(e);
+      console.log(e);
     }
   }, []);
 
   // This method is used to delete a model from the LLM.
+  /* eslint-disable react-hooks/exhaustive-deps */
   const deleteModel = useCallback(async (modelName: string) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/delete`, {
+      await fetch(`${BASE_URL}/api/delete`, {
         method: 'delete',
         headers: {
           'content-type': 'application/json',
@@ -359,6 +366,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
   // Method to set the conversation based on the uuid.
   // This will fetch the conversation from the database and update the state.
   // It will also set the uuid to the current conversation uuid.
+  /* eslint-disable react-hooks/exhaustive-deps */
   const setConversation = useCallback(async (convUuid: string) => {
     uuid.current = convUuid;
     const conversations = await db.getAll('conversations', convUuid, true, 'uuid')
@@ -375,6 +383,7 @@ export const ChatContextProvider: React.FC<childProps> = ({ children }) => {
   // Method to delete a chat.
   // This will delete the chat from the database and reset the state.
   // It will also delete all the conversations associated with the chat.
+  /* eslint-disable react-hooks/exhaustive-deps */
   const deleteChat = useCallback((uuid: string) => {
     db.delete('chats', uuid);
     db.delete('conversations', uuid, true, 'uuid');

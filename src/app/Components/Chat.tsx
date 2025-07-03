@@ -11,10 +11,12 @@ import { LogoSVG } from '../SVG';
  * @returns A React component that displays the chat message.
  */
 export const Chat: React.FC<chatMessage> = memo(({ role, content }) => {
-  const { theme } = useContext(ThemeContext);
+  // const { theme } = useContext(ThemeContext);
   if (role === 'user') return <UserChat content={content} />
   return <AssistantChat content={content} />
 });
+
+Chat.displayName = 'Chat'
 
 interface contentInterface {
   content: string;
@@ -37,6 +39,8 @@ const AssistantChat: React.FC<contentInterface> = memo(({ content }) => {
   </div>
 })
 
+AssistantChat.displayName = 'AssistantChat'
+
 /**
  * This component renders a chat message from the user.
  * It displays the content of the user's message in a styled span.
@@ -53,3 +57,5 @@ const UserChat: React.FC<contentInterface> = memo(({ content }) => {
     </span>
   </div>
 });
+
+UserChat.displayName = 'UserChat'

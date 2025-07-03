@@ -14,6 +14,7 @@ export const Header: React.FC = memo(() => {
   const { theme } = useContext(ThemeContext);
   const { listModels, newChat } = useContext(ChatContext);
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     listModels();
   }, []);

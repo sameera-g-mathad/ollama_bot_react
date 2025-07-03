@@ -1,8 +1,7 @@
-import React, { memo, useContext, useEffect } from "react";
+import React, { memo, useContext } from "react";
 import ChatContext from "../Context/ChatContext";
 import { TrashSVG } from "../SVG";
 import ThemeContext from "../Context/ThemeContext";
-import { Button } from "./Button";
 
 interface sidebarInterface {
     isOpen: boolean
@@ -36,3 +35,5 @@ export const SideBar: React.FC<sidebarInterface> = memo(({ isOpen }) => {
         </div>
     </div>;
 });
+
+SideBar.displayName = 'SideBar'
