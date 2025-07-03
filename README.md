@@ -41,7 +41,7 @@ This is a simple chat application that allows users to interact with an AI model
 
 ### Exmple image of a chat interface:
 
-![chat-interface](https://drive.google.com/file/d/1Ldm45XDdzhDNJ8HBBluzO-NlehWMs3Vv/view?usp=sharing)
+![chat-interface](readme_images/chat_interface.gif)
 
 - **Theme Switching**: Users can switch between light and dark themes for better readability.
 
