@@ -20,7 +20,7 @@ export const SelectModels = memo(() => {
       <div
         onClick={() => setModelVisible((prev) => !prev)}
         className={`border absolute sm:left-1/2 left-[70%] transfrom -translate-x-1/2 top-2 ${activeModel ? 'visible' : 'hidden'
-          } rounded-lg p-1 px-3 flex justify-center items-center`}
+          } rounded-lg p-1 px-2 flex justify-center items-center tracking-wide font-medium`}
       >
         <div
           className={`w-2 h-2 ${activeModel ? 'bg-blue-500' : ''
@@ -42,7 +42,7 @@ export const SelectModels = memo(() => {
             <div
               key={i}
               onClick={() => setSelectedModel(el)}
-              className={`flex ${selectedModel === el ? 'bg-blue-50 border-blue-500' : ''
+              className={`flex ${selectedModel === el ? 'bg-blue-200 border-blue-500' : ''
                 } justify-between p-3 px-4 mt-2 border rounded-lg shadow-sm`}
             >
               <span className='font-bold'>{el}</span>
@@ -55,7 +55,7 @@ export const SelectModels = memo(() => {
         <div className="flex absolute bottom-0 right-0 p-4">
           <button
             onClick={() => setModelVisible((prev) => !prev)}
-            className="mr-2 border p-2 rounded-lg bg-red-500 text-white active:bg-red-700"
+            className="mr-2  p-2 rounded-lg bg-red-500 text-white active:bg-red-700"
           >
             Cancel
           </button>
@@ -64,7 +64,7 @@ export const SelectModels = memo(() => {
               selectModel(selectedModel);
               setModelVisible((prev) => !prev);
             }}
-            className="border p-2 rounded-lg bg-green-500 text-white active:bg-green-700"
+            className=" p-2 rounded-lg bg-green-500 text-white active:bg-green-700"
           >
             Save
           </button>

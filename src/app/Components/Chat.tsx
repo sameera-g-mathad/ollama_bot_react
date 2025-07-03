@@ -1,6 +1,7 @@
 import React, { memo, useContext } from 'react';
 import { chatMessage } from '../Context/ChatContext';
 import ThemeContext from '../Context/ThemeContext';
+import { LogoSVG } from '../SVG';
 
 
 export const Chat: React.FC<chatMessage> = memo(({ role, content }) => {
@@ -14,9 +15,11 @@ interface contentInterface {
 }
 
 const AssistantChat: React.FC<contentInterface> = memo(({ content }) => {
-  return <div className="flex">
+  const { theme } = useContext(ThemeContext)
+  return <div className="flex items-end gap-3 p-3 mt-2">
+    <div><LogoSVG theme={theme} className='!w-5 !h-5' /></div>
     <div
-      className="border-none rounded-xl p-3 whitespace-pre-line"
+      className="border-none whitespace-pre-line"
       dangerouslySetInnerHTML={{ __html: content }}
     />
   </div>
@@ -25,7 +28,7 @@ const AssistantChat: React.FC<contentInterface> = memo(({ content }) => {
 const UserChat: React.FC<contentInterface> = memo(({ content }) => {
   return <div className="flex justify-end">
     <span
-      className="border rounded-xl p-1 px-3"
+      className="border flex rounded-xl p-1 px-3"
       style={{ maxWidth: '70%' }}
     >
       {content}

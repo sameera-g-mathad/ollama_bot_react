@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Body, Footer, Header } from './index';
+import { Footer, Header } from './index';
 import ThemeContext from '../Context/ThemeContext';
 
 interface childProps {

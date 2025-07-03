@@ -27,14 +27,14 @@ export const Settings: React.FC<settingInterface> = ({ clicked }) => {
       </ButtonGroup>
 
       <ButtonGroup>
-        <Button callback={() => changeTextSize('text-sm')}>
+        <Button callback={() => changeTextSize('text-xs')}>
           <span className="text-xs">aA</span>
+        </Button>
+        <Button callback={() => changeTextSize('text-sm')}>
+          <span className="text-sm">aA</span>
         </Button>
         <Button callback={() => changeTextSize('text-base')}>
           <span className="text-base">aA</span>
-        </Button>
-        <Button callback={() => changeTextSize('text-lg')}>
-          <span className="text-lg">aA</span>
         </Button>
       </ButtonGroup>
     </div>

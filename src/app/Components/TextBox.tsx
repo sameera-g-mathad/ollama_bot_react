@@ -19,7 +19,7 @@ export const TextBox = () => {
         <textarea
           style={{ height: `${textheight}px` }}
           className="outline-none w-full pl-2 resize-none bg-transparent "
-          placeholder="Ask anything..."
+          placeholder="Ask Anything..."
           value={query}
           onChange={(e) => {
             if ((e.target.value, e.target.value !== '\n')) {

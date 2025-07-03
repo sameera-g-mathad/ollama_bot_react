@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useReducer, useRef } from 'react';
+import React, { createContext, useEffect, useReducer, useRef } from 'react';
 
 interface childProps {
   children: React.ReactElement;
@@ -36,11 +36,15 @@ const themeReducer = (
 };
 
 export const ThemeContextProvider: React.FC<childProps> = ({ children }) => {
-  const theme = useRef(localStorage.getItem('theme'))
-  const textSize = useRef(localStorage.getItem('textSize'))
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    const savedTextSize = localStorage.getItem('textSize');
+    dispatch({ action: 'themeChange', value: savedTheme || 'light' });
+    dispatch({ action: 'textSizeChange', value: savedTextSize || 'text-xs' });
+  }, []);
   const [state, dispatch] = useReducer(themeReducer, {
-    theme: theme.current || 'light',
-    textSize: textSize.current || 'text-xs',
+    theme: 'light',
+    textSize: 'text-sm',
   });
   const changeTheme = (theme: string) => {
     if (['light', 'dark', 'system'].includes(theme)) {

@@ -14,7 +14,7 @@ export const formatMessage = (message: string): string => {
 
   // Check for bold letters
   if (message.includes('**')) {
-    message = message.replace(/\s\*\*/, '\\s<b>').replace(/\*\*/, '</b>');
+    message = message.replace(/\s\*\*/, '<b>').replace(/\*\*/, '</b>');
   }
 
   return message;
