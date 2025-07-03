@@ -29,7 +29,7 @@ interface contentInterface {
 const AssistantChat: React.FC<contentInterface> = memo(({ content }) => {
   const { theme } = useContext(ThemeContext)
   return <div className="flex items-end gap-3 p-3 mt-2">
-    <div><LogoSVG theme={theme} className='!w-5 !h-5' /></div>
+    <div className='pb-1'><LogoSVG theme={theme} className='!w-5 !h-5' /></div>
     <div
       className="border-none whitespace-pre-line"
       dangerouslySetInnerHTML={{ __html: content }}
