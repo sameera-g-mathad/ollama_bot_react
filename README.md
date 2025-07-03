@@ -1,4 +1,4 @@
-# Ollama Bot
+# Ollama Bot [Website](https://ollamabot.netlify.app/)
 
 This is a simple chat application that allows users to interact with an AI model using Ollama. The application is built with React and TypeScript using Next.js, and it includes features like chat history, message submission, and theme switching.
 
