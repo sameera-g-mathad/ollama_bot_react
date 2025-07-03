@@ -12,6 +12,10 @@ This is a simple chat application that allows users to interact with an AI model
 
 - Ollama is required to run this project as it serves as the backend. You can download and install it from [Ollama official website](https://ollama.com/download).
 
+## Inspiration
+
+This project was inspired by an chrome extenstion call ![Page Assist](https://chromewebstore.google.com/detail/page-assist-a-web-ui-for/jfgfiigpkhlkbnfnbobbkinehhfdhndo?hl=en&pli=1), that allows users to interact with AI models in web applications using Ollama as a backend.
+
 ## Run this project locally
 
 1. Clone the repository:
