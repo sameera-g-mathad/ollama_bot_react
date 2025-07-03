@@ -38,7 +38,6 @@ export const Content: React.FC = memo(() => {
               <div className='w-full h-1/2 flex flex-col items-center gap-5'>
                 <LogoSVG theme={theme} className='sm:!w-20 sm:!h-20 !w-16 !h-16' />
                 <span className='font-bold text-2xl tracking-widest'>Ollama Bot</span>
-
               </div>
             </div>
         }

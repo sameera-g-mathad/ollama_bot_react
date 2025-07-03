@@ -21,7 +21,7 @@ export const OllamaStatus: React.FC = () => {
             <OllamaLogoSVG theme='light' />
             <span>Connected to Ollama — Ready to chat!</span>
           </span> :
-          <span>🚫 Connection issue detected. Try refreshing or checking Ollama status.</span>
+          <span>🚫 Connection issue detected. Try refreshing or checking Ollama status. <span>In case of CORS related issue, click <a className='text-blue-500' href='https://objectgraph.com/blog/ollama-cors/'>here.</a></span></span>
       }
     </div>
   );
