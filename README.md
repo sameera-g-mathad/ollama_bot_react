@@ -63,7 +63,9 @@ This project was inspired by an chrome extenstion call ![Page Assist](https://ch
 
 ### Example image of a chat history:
 
-![chat-history](readme_images/chat_history.png)
+<div aligh="center">
+   <img src="readme_images/chat_history.png" alt="chat-history" width="250", height="250">
+</div>
 
 - **Persistent Storage**: The application uses IndexedDB to save chat history and user preferences, ensuring that data is retained across sessions. The code is available in the `src/app/Utils/db.ts` file.
 
@@ -75,7 +77,9 @@ This project was inspired by an chrome extenstion call ![Page Assist](https://ch
 
 ### Example image of responsive design:
 
-![responsive-design](readme_images/responsive_design.png)
+<div aligh="center">
+   <img src="readme_images/responsive_design.png" alt="responsive-design" width="250", height="250">
+</div>
 
 - **Status Indicator**: The application includes a status indicator that shows whether the AI model(Ollama) is online or offline or if there was any error in the system. This helps users know if they can interact with the model.
 
