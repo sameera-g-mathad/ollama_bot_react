@@ -63,7 +63,7 @@ This project was inspired by an chrome extenstion call ![Page Assist](https://ch
 
 ### Example image of a chat history:
 
-<div aligh="center">
+<div align="center">
    <img src="readme_images/chat_history.png" alt="chat-history" width="250", height="250">
 </div>
 
@@ -77,7 +77,7 @@ This project was inspired by an chrome extenstion call ![Page Assist](https://ch
 
 ### Example image of responsive design:
 
-<div aligh="center">
+<div align="center">
    <img src="readme_images/responsive_design.png" alt="responsive-design" width="250", height="250">
 </div>
 
